@@ -14,7 +14,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::all();
+
+        return view('product.index',compact('products'));
     }
 
     /**
@@ -24,7 +26,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('product.create');
+
     }
 
     /**
@@ -35,7 +38,27 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            "title" => "required|string|min:3",
+            "price" => "required|numeric",
+            "description" => "required|max:280",
+            "avatar" => "required|mimes:jpeg,jpg,png,gif|max:10000",
+        ],[
+            "required" => "El campo es obligatorio.",
+            "numeric" => "Debe ingresar números.",
+            "max" => "La imagen no puede superar los 10 MB.",
+            "mines" => "El formato de la imagen debe ser jpeg,jpg,png,gif."
+        ]);
+
+        $nuevoUsuario = new Product;
+        $nuevoUsuario->title = $request->title;
+        $nuevoUsuario->price = $request->price;
+        $nuevoUsuario->description = $request->description;
+        $nuevoUsuario->avatar = $request->avatar;
+    
+        $nuevoUsuario->save();
+
+        return redirect("/");
     }
 
     /**
@@ -57,7 +80,8 @@ class ProductController extends Controller
      */
     public function edit(product $product)
     {
-        //
+        $products = Product::find($id);
+        return view('products.edit',compact('products'));
     }
 
     /**
@@ -69,7 +93,27 @@ class ProductController extends Controller
      */
     public function update(Request $request, product $product)
     {
-        //
+        $this->validate($request,[
+            "title" => "required|string|min:3",
+            "price" => "required|numeric",
+            "description" => "required|max:280",
+            "avatar" => "required|mimes:jpeg,jpg,png,gif|max:10000",
+        ],[
+            "required" => "El campo es obligatorio.",
+            "price" => "Debe ingresar números.",
+            "max" => "La imagen no puede superar los 10 MB.",
+            "mines" => "El formato de la imagen debe ser jpeg,jpg,png,gif."
+        ]);
+
+        $nuevoUsuario = new Product;
+        $nuevoUsuario->title = $request->title;
+        $nuevoUsuario->price = $request->price;
+        $nuevoUsuario->description = $request->description;
+        $nuevoUsuario->avatar = $request->avatar;
+    
+        $nuevoUsuario->save();
+
+        return redirect("/");
     }
 
     /**

@@ -13,7 +13,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::all();
+
+        return view('user.index',compact('users'));
     }
 
     /**
@@ -23,7 +25,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('user.create');
+
     }
 
     /**
@@ -34,7 +37,25 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            "name" => "required|string|min:3",
+            "email" => "required|unique:users",
+            "password" => "required|same:confirm_password"
+        ],[
+            "required" => "El campo es obligatorio.",
+            "unique" => "Este email ya existe.",
+            "string" => "El nombre debe ser texto.",
+            "same" => "Las contraseñas no coinciden."
+        ]);
+
+        $nuevoUsuario = new User;
+        $nuevoUsuario->name = $request->name;
+        $nuevoUsuario->email = $request->email;
+        $nuevoUsuario->password = password_hash($request->password,PASSWORD_DEFAULT);
+    
+        $nuevoUsuario->save();
+
+        return redirect("/");
     }
 
     /**
@@ -56,7 +77,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $usuario = User::find($id);
+        return view('users.edit',compact('usuario'));
     }
 
     /**
@@ -68,7 +90,24 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            "name" => "required|string|min:3",
+            "email" => "required|unique:users",
+            "password" => "required|same:confirm_password"
+        ],[
+            "required" => "El campo es obligatorio.",
+            "unique" => "Este email ya existe.",
+            "string" => "El nombre debe ser texto.",
+            "same" => "Las contraseñas no coinciden."
+        ]);
+
+        $usuarioAEditar = User::find($id);
+        $usuarioAEditar->name = $request->name;
+        $usuarioAEditar->email = $request->email;
+        $usuarioAEditar->password = $request->password;
+        $usuarioAEditar->save();
+
+        return redirect('/');
     }
 
     /**

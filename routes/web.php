@@ -21,3 +21,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/partial/Header', function () {
     return view('/partial/Header');
 });
+Route::get('/partial/Footer', function () {
+    return view('/partial/Footer');
+});
+Route::get('/faqs', function () {
+    return view('faqs');
+});
